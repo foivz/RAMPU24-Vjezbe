@@ -5,4 +5,12 @@
     <string name="tasks_pending">Pending</string>
     <string name="tasks_completed">Completed</string>
     <string name="news">News</string>
+    <string name="task_name">Task name</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="category">Category</string>
+    <string name="create_a_new_task">Create a new task</string>
+    <string name="delete_task">Delete task</string>
+    <string name="mark_as_completed">Mark as completed</string>
+    <string name="cancel">Cancel</string>
 </resources>

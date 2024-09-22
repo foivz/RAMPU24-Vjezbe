@@ -6,9 +6,9 @@
     tools:context=".fragments.CompletedFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_completed_tasks"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Completed fragment" />
+        android:layout_height="match_parent" />
 
 </FrameLayout>
