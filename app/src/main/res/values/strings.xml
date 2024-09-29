@@ -16,4 +16,5 @@
     <string name="news_list_item_image_desc">A news image</string>
     <string name="refresh_news_button_desc">Refresh news</string>
     <string name="news_ws_err_msg">News are currently not available. Please, try again later.</string>
+    <string name="task_has_timer">Task has timer</string>
 </resources>
