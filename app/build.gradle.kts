@@ -50,4 +50,5 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.converter.gson)
     implementation(libs.picasso)
+    implementation(libs.kotlinx.coroutines.android)
 }
