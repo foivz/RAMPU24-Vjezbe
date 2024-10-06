@@ -49,5 +49,6 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     implementation(libs.gson)
     implementation(libs.converter.gson)
+    implementation(libs.squareup.retrofit)
     implementation(libs.picasso)
 }
