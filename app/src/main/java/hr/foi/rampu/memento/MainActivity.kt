@@ -10,6 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.gms.wearable.Wearable
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -21,6 +22,7 @@ import hr.foi.rampu.memento.fragments.PendingFragment
 import hr.foi.rampu.memento.helpers.MockDataLoader
 import hr.foi.rampu.memento.helpers.TaskDeletionServiceHelper
 import hr.foi.rampu.memento.services.TaskDeletionService
+import hr.foi.rampu.memento.sync.WearableSynchronizer
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     private val taskDeletionServiceHelper by lazy {
         TaskDeletionServiceHelper(applicationContext)
     }
+    private val dataClient by lazy { Wearable.getDataClient(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -125,6 +128,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun fillNavDrawerWithFragments() {
+        navView.menu.setGroupDividerEnabled(true)
+
+        var newNavMenuIndex = 0
+
         mainPagerAdapter.fragmentItems.withIndex().forEach { (index, fragmentItem) ->
             navView.menu
                 .add(fragmentItem.titleRes)
@@ -137,6 +144,26 @@ class MainActivity : AppCompatActivity() {
                     return@setOnMenuItemClickListener true
                 }
         }
+
+        newNavMenuIndex++
+
+        navView.menu
+            .add(newNavMenuIndex,
+                0,
+                newNavMenuIndex,
+                getString(R.string.sync_wear_os)
+            )
+            .setIcon(R.drawable.baseline_watch_24)
+            .setOnMenuItemClickListener{
+                WearableSynchronizer.sendTasks(
+                    TasksDatabase
+                        .getInstance()
+                        .getTasksDao()
+                        .getAllTasks(false),
+                    dataClient
+                )
+                return@setOnMenuItemClickListener true
+            }
     }
 
     private fun activateTaskDeletionService() {

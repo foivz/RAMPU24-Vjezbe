@@ -52,4 +52,5 @@ dependencies {
     implementation(libs.squareup.retrofit)
     implementation(libs.picasso)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.play.services.wearable)
 }

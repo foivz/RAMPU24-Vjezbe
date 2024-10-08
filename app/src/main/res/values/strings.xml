@@ -17,4 +17,5 @@
     <string name="refresh_news_button_desc">Refresh news</string>
     <string name="news_ws_err_msg">News are currently not available. Please, try again later.</string>
     <string name="task_has_timer">Task has timer</string>
+    <string name="sync_wear_os">Sync Wear OS</string>
 </resources>
