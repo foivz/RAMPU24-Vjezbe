@@ -21,7 +21,8 @@
         app:tabTextColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="description"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpager"
