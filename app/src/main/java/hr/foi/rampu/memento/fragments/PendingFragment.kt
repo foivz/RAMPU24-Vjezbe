@@ -1,5 +1,6 @@
 package hr.foi.rampu.memento.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -49,9 +50,21 @@ class PendingFragment : Fragment() {
 
         btnCreateTask = view.findViewById(R.id.fab_pending_fragment_create_task)
         btnCreateTask.setOnClickListener {
-
+            showDialog()
         }
 
+
+    }
+
+    private fun showDialog() {
+        val newTaskDialogView = LayoutInflater
+            .from(context)
+            .inflate(R.layout.new_task_dialog, null)
+
+        AlertDialog.Builder(context)
+            .setView(newTaskDialogView)
+            .setTitle(getString(R.string.create_a_new_task))
+            .show()
 
     }
 }
