@@ -5,10 +5,19 @@ import hr.foi.rampu.memento.entities.TaskCategory
 import java.util.Date
 
 object MockDataLoader {
-    fun getDemoData() : List<Task> = listOf(
-        Task("Submit seminar paper", Date(), TaskCategory("RAMPU", "#000080"), false),
-        Task("Prepare for exercises", Date(), TaskCategory("RPP", "#FF0000"), false),
-        Task("Rally a project team", Date(), TaskCategory("RAMPU", "#000080"), false),
-        Task("Connect to server (SSH)", Date(), TaskCategory("RWA", "#CCCCCC"), false)
+    fun getDemoData() : List<Task> {
+        val categories = getDemoCategories()
+        return listOf(
+            Task("Submit seminar paper", Date(), TaskCategory("RAMPU", "#000080"), false),
+            Task("Prepare for exercises", Date(), TaskCategory("RPP", "#FF0000"), false),
+            Task("Rally a project team", Date(), TaskCategory("RAMPU", "#000080"), false),
+            Task("Connect to server (SSH)", Date(), TaskCategory("RWA", "#CCCCCC"), false)
+        )
+    }
+
+    fun getDemoCategories() : List<TaskCategory> = listOf(
+        TaskCategory("RAMPU", "#000080"),
+        TaskCategory("RPP", "#FF0000"),
+        TaskCategory("RWA", "#CCCCCC")
     )
 }
