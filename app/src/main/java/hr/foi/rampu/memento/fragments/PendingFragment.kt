@@ -7,12 +7,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import hr.foi.rampu.memento.R
 import hr.foi.rampu.memento.adapters.TasksAdapter
+import hr.foi.rampu.memento.entities.TaskCategory
 import hr.foi.rampu.memento.helpers.MockDataLoader
+import hr.foi.rampu.memento.helpers.NewTaskDialogHelper
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -61,10 +64,18 @@ class PendingFragment : Fragment() {
             .from(context)
             .inflate(R.layout.new_task_dialog, null)
 
+        val dialogHelper = NewTaskDialogHelper(newTaskDialogView)
+
         AlertDialog.Builder(context)
             .setView(newTaskDialogView)
             .setTitle(getString(R.string.create_a_new_task))
+            .setPositiveButton(getString(R.string.create_a_new_task)) { _, _ ->
+                val newTask = dialogHelper.buildTask()
+            }
             .show()
 
+        dialogHelper.populateSpinner(MockDataLoader.getDemoCategories())
+        dialogHelper.activateDateTimeListeners()
     }
+
 }
