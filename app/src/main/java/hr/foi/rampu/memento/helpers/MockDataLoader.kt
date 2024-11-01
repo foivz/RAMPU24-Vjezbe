@@ -8,10 +8,10 @@ object MockDataLoader {
     fun getDemoData() : List<Task> {
         val categories = getDemoCategories()
         return listOf(
-            Task("Submit seminar paper", Date(), TaskCategory("RAMPU", "#000080"), false),
-            Task("Prepare for exercises", Date(), TaskCategory("RPP", "#FF0000"), false),
-            Task("Rally a project team", Date(), TaskCategory("RAMPU", "#000080"), false),
-            Task("Connect to server (SSH)", Date(), TaskCategory("RWA", "#CCCCCC"), false)
+            Task("Submit seminar paper", Date(), categories[0], false),
+            Task("Prepare for exercises", Date(), categories[1], false),
+            Task("Rally a project team", Date(), categories[0], false),
+            Task("Connect to server (SSH)", Date(), categories[2], false)
         )
     }
 
