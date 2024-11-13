@@ -3,6 +3,7 @@ package hr.foi.rampu.memento
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
@@ -177,6 +178,20 @@ class MainActivity : AppCompatActivity() {
             .setEnabled(false)
 
         attachMenuItemToTasksCreatedCount(tasksCounterItem)
+
+        newNavMenuIndex++
+
+        navView.menu
+            .add(newNavMenuIndex, newNavMenuIndex, newNavMenuIndex,
+                getString(R.string.settings_menu_item))
+            .setIcon(R.drawable.ic_baseline_settings_24)
+            .setOnMenuItemClickListener {
+                val intent = Intent(baseContext, PreferencesActivity::class.java)
+                startActivity(intent)
+                navDrawerLayout.closeDrawers()
+                return@setOnMenuItemClickListener true
+            }
+
     }
 
     private fun activateTaskDeletionService() {

@@ -18,4 +18,9 @@
     <string name="news_ws_err_msg">Vijesti trenutno nisu dostupne. Molimo, pokušajte kasnije.</string>
     <string name="task_has_timer">Zadatak ima odbrojavanje</string>
     <string name="sync_wear_os">Sinkroniziraj Wear OS</string>
+    <string name="preferences_force_dark_mode">Forsiraj tamni način rada</string>
+    <string name="preferences_application_language">Jezik aplikacije</string>
+    <string name="preferences_template_task_name">Predložak naziva zadatka</string>
+    <string name="preferences_default_task_name_summary">Postavite automatski naziv zadatka koji će se primijeniti svaki put pri stvaranju novog zadatka.</string>
+    <string name="settings_menu_item">Postavke</string>
 </resources>
