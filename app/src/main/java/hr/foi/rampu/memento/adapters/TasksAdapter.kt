@@ -8,11 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import hr.foi.rampu.memento.R
 import hr.foi.rampu.memento.database.TasksDatabase
 import hr.foi.rampu.memento.entities.Task
+import hr.foi.rampu.memento.helpers.DeletedTaskRecovery
 import hr.foi.rampu.memento.services.TaskTimerService
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -66,8 +69,22 @@ class TasksAdapter(
 
                 val alertDialogBuilder = AlertDialog.Builder(view.context)
                     .setTitle(taskName.text)
-                    .setNeutralButton(R.string.delete_task) {_, _ ->
-                        TasksDatabase.getInstance().getTasksDao().removeTask(currentTask)
+                    .setNeutralButton(view.context.getString(R.string.delete_task)) {_, _ ->
+                        DeletedTaskRecovery.pushTask(currentTask, view.context.cacheDir)
+                        val tasksDao = TasksDatabase.getInstance().getTasksDao()
+                        val snack =
+                            Snackbar
+                                .make(view, "Revert?", Snackbar.LENGTH_LONG).setAction("Recover") { view ->
+                                    try {
+                                        val poppedTaskId = DeletedTaskRecovery.popTask(view.context.cacheDir)
+                                        val restoredTask = tasksDao.getTask(poppedTaskId)
+                                        addTask(restoredTask)
+                                    } catch (ex: Exception) {
+                                        Toast.makeText(view.context, ex.message, Toast.LENGTH_LONG).show()
+                                    }
+                                }
+                        snack.show()
+                        tasksDao.removeTask(currentTask)
                         removeTaskFromList()
                     }
                     .setNegativeButton(R.string.cancel) { dialog, _ ->
