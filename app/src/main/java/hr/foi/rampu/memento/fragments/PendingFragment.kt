@@ -82,6 +82,7 @@ class PendingFragment : Fragment() {
             .getAllCategories()
         dialogHelper.populateSpinner(categories)
         dialogHelper.activateDateTimeListeners()
+        dialogHelper.setDefaultTaskName()
     }
 
     private fun loadTaskList() {
