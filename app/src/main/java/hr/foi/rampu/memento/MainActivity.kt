@@ -6,14 +6,17 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.preference.PreferenceManager
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.gms.wearable.Wearable
 import com.google.android.material.navigation.NavigationView
@@ -26,8 +29,8 @@ import hr.foi.rampu.memento.fragments.NewsFragment
 import hr.foi.rampu.memento.fragments.PendingFragment
 import hr.foi.rampu.memento.helpers.MockDataLoader
 import hr.foi.rampu.memento.helpers.TaskDeletionServiceHelper
-import hr.foi.rampu.memento.services.TaskDeletionService
 import hr.foi.rampu.memento.sync.WearableSynchronizer
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,9 +45,18 @@ class MainActivity : AppCompatActivity() {
     private val dataClient by lazy { Wearable.getDataClient(this) }
     lateinit var onSharedPreferencesListener: OnSharedPreferenceChangeListener
 
+    private val settingsLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_LANG_CHANGED) {
+                recreate()
+            }
+        }
+    private var configurationChanged = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContentView(R.layout.activity_main)
         initializeMainPagerAdapter()
 
@@ -54,8 +66,10 @@ class MainActivity : AppCompatActivity() {
         connectViewPagerWithTabLayout()
         connectNavDrawerWithViewPager()
 
-        val channel = NotificationChannel ("task-timer", "Task Timer Channel",
-            NotificationManager.IMPORTANCE_HIGH)
+        val channel = NotificationChannel(
+            "task-timer", "Task Timer Channel",
+            NotificationManager.IMPORTANCE_HIGH
+        )
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
         activateTaskDeletionService()
@@ -127,7 +141,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position : Int) {
+            override fun onPageSelected(position: Int) {
                 navView.menu.getItem(position).isChecked = true
             }
         })
@@ -182,12 +196,18 @@ class MainActivity : AppCompatActivity() {
         newNavMenuIndex++
 
         navView.menu
-            .add(newNavMenuIndex, newNavMenuIndex, newNavMenuIndex,
-                getString(R.string.settings_menu_item))
+            .add(
+                newNavMenuIndex, newNavMenuIndex, newNavMenuIndex,
+                getString(R.string.settings_menu_item)
+            )
             .setIcon(R.drawable.ic_baseline_settings_24)
             .setOnMenuItemClickListener {
-                val intent = Intent(baseContext, PreferencesActivity::class.java)
-                startActivity(intent)
+                settingsLauncher.launch(
+                    Intent(
+                        this,
+                        PreferencesActivity::class.java
+                    )
+                )
                 navDrawerLayout.closeDrawers()
                 return@setOnMenuItemClickListener true
             }
@@ -238,9 +258,38 @@ class MainActivity : AppCompatActivity() {
         updateTasksCreatedCounter(tasksCounterItem, sharedPreferences)
     }
 
-    private fun updateTasksCreatedCounter(tasksCounterItem: MenuItem,
-                                          sharedPreferences: SharedPreferences) {
+    private fun updateTasksCreatedCounter(
+        tasksCounterItem: MenuItem,
+        sharedPreferences: SharedPreferences
+    ) {
         val tasksCreated = sharedPreferences.getInt("tasks_created_counter", 0)
         tasksCounterItem.title = "Tasks created: $tasksCreated"
     }
+
+    private fun applyUserSettings(newContext: Context?) : Context {
+        PreferenceManager.getDefaultSharedPreferences(newContext!!)?.let { pref ->
+            PreferencesActivity.switchDarkMode(
+                pref.getBoolean("preference_dark_mode", false)
+            )
+            val lang = pref.getString("preference_language", "EN")
+            if (lang != null) {
+                val locale = Locale(lang)
+                if (newContext.resources.configuration.locales[0].language != locale.language) {
+                    newContext.resources.configuration.setLocale(locale)
+                    Locale.setDefault(locale)
+                    val config = Configuration(newContext.resources.configuration)
+                    config.setLocale(locale)
+                    return newContext.createConfigurationContext(newContext.resources.configuration)
+                }
+            }
+        }
+        return newContext
+    }
+
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(applyUserSettings(newBase))
+    }
+
+
 }
