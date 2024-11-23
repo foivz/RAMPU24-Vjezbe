@@ -51,7 +51,6 @@ class MainActivity : AppCompatActivity() {
                 recreate()
             }
         }
-    private var configurationChanged = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -277,8 +276,6 @@ class MainActivity : AppCompatActivity() {
                 if (newContext.resources.configuration.locales[0].language != locale.language) {
                     newContext.resources.configuration.setLocale(locale)
                     Locale.setDefault(locale)
-                    val config = Configuration(newContext.resources.configuration)
-                    config.setLocale(locale)
                     return newContext.createConfigurationContext(newContext.resources.configuration)
                 }
             }
