@@ -3,8 +3,7 @@ package hr.foi.rampu.memento.presentation.theme
 import androidx.compose.ui.graphics.Color
 import androidx.wear.compose.material.Colors
 
-class Color {
-}val MementoBlue = Color(0xFFCAE2FF)
+val MementoBlue = Color(0xFFCAE2FF)
 val MementoDarkerBlue = Color(0xFFAEC8FC)
 val MementoAccent = Color(0xFFFF5722)
 val Red400 = Color(0xFFCF6679)
