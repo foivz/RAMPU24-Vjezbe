@@ -267,7 +267,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun applyUserSettings(newContext: Context?) : Context {
-        PreferenceManager.getDefaultSharedPreferences(newContext!!)?.let { pref ->
+        PreferenceManager.getDefaultSharedPreferences(newContext!!).let { pref ->
             PreferencesActivity.switchDarkMode(
                 pref.getBoolean("preference_dark_mode", false)
             )
